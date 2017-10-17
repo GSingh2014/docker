@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  oracledb:
+    image: jmereminsky-docker-local.jfrog.io/ora:orase_11.2.0.4.0
+    restart: always
+    ports:
+      - 1521:1521
+    healthcheck:
+      test: ["CMD-SHELL", "su - oracle -c 'tnsping localhost:1521'"]
+      interval: 5s
+      timeout: 2s
+      retries: 15

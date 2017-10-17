@@ -1,0 +1,35 @@
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.5.9"
+    }
+}
+
+apply plugin: 'docker-compose'
+
+dockerCompose.isRequiredBy(test)
+dockerCompose.isRequiredBy(build)
+
+dockerCompose {
+    useComposeFiles = ['src/main/resources/docker-compose.yml']
+    captureContainersOutput = true
+    forceRecreate = true
+}
+
+task createUserPropertiesFile() << {
+    def file = new File("$projectDir/../gradle.user.properties")
+    file.createNewFile()
+    file.text = """
+dbHost=localhost
+dbPort=1521
+dbService=or11g
+"""
+}
